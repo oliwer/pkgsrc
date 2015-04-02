@@ -1116,10 +1116,11 @@ yes) echo_msg "Bootstrapping ksh"
 	copy_src $pkgsrcdir/shells/mksh/files ksh
 	test -n "$CC" || CC=gcc # default to gcc if no compiler is specified
 	mksh_para=""; test $make_jobs -lt 2 || mksh_para="-j"
-	run_cmd "(cd $wrkdir/ksh && env $BSTRAP_ENV $shprog ./Build.sh -r $mksh_para)"
+	run_cmd "(cd $wrkdir/ksh && env $BSTRAP_ENV CFLAGS=\"${CFLAGS} -DMKSH_BINSHPOSIX\" $shprog ./Build.sh -r $mksh_para)"
 	run_cmd "$install_sh -c -o $user -g $group -m 755 $wrkdir/ksh/mksh $wrkdir/bin/mksh"
-	echo "TOOLS_PLATFORM.sh?= $prefix/bin/mksh" >> ${TARGET_MKCONF}
-	echo "TOOLS_PLATFORM.sh?= $wrkdir/bin/mksh" >> ${BOOTSTRAP_MKCONF}
+	run_cmd "(cd $wrkdir/bin && ln -s mksh sh)"
+	echo "TOOLS_PLATFORM.sh?= $prefix/bin/sh" >> ${TARGET_MKCONF}
+	echo "TOOLS_PLATFORM.sh?= $wrkdir/bin/sh" >> ${BOOTSTRAP_MKCONF}
 	echo "TOOLS_PLATFORM.ksh?= $prefix/bin/mksh" >> ${TARGET_MKCONF}
 	echo "TOOLS_PLATFORM.ksh?= $wrkdir/bin/mksh" >> ${BOOTSTRAP_MKCONF}
 # Now rebootstrap bmake for ksh
