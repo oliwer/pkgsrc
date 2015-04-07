@@ -13,7 +13,7 @@ LICENSE=			miros
 
 PKG_SHELL=			bin/mksh
 
-CFLAGS+=			-DMKSH_BINSHPOSIX -DMKSH_DISABLE_EXPERIMENTAL
+CPPFLAGS+=			-DMKSH_BINSHPOSIX -DMKSH_DISABLE_EXPERIMENTAL
 LIBS.Interix+=			-lcrypt
 
 INSTALLATION_DIRS=		bin ${PKGMANDIR}/man1 ${PKG_SYSCONFDIR}/skel
@@ -22,10 +22,10 @@ do-extract:
 	${CP} -R ${FILESDIR} ${WRKSRC}
 
 do-build:
-	cd ${WRKSRC} && ${SETENV} ${MAKE_ENV} LIBS=${LIBS:Q} CFLAGS=${CFLAGS:Q} \
+	cd ${WRKSRC} && ${SETENV} ${MAKE_ENV} LIBS=${LIBS:Q} CPPFLAGS=${CPPFLAGS:Q} \
 	    ${TOOLS_SHELL} ${WRKSRC}/Build.sh -r
 	# lksh
-	cd ${WRKSRC} && ${SETENV} ${MAKE_ENV} LIBS=${LIBS:Q} CFLAGS=${CFLAGS:Q} \
+	cd ${WRKSRC} && ${SETENV} ${MAKE_ENV} LIBS=${LIBS:Q} CPPFLAGS=${CPPFLAGS:Q} \
 	    ${TOOLS_SHELL} ${WRKSRC}/Build.sh -L -r
 	${SED} -i -e "s,/etc,${PKG_SYSCONFDIR},g" ${WRKSRC}/skel.mkshrc
 
