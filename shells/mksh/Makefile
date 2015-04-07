@@ -16,6 +16,11 @@ PKG_SHELL=			bin/mksh
 CPPFLAGS+=			-DMKSH_BINSHPOSIX -DMKSH_DISABLE_EXPERIMENTAL
 LIBS.Interix+=			-lcrypt
 
+SUBST_CLASSES+=		skel
+SUBST_STAGE.skel=		pre-configure
+SUBST_FILES.skel=		skel.mkshrc
+SUBST_SED.skel=		-e "s,/etc,${PKG_SYSCONFDIR},g"
+
 INSTALLATION_DIRS=		bin ${PKGMANDIR}/man1 ${PKG_SYSCONFDIR}/skel
 
 do-extract:
@@ -27,7 +32,6 @@ do-build:
 	# lksh
 	cd ${WRKSRC} && ${SETENV} ${MAKE_ENV} LIBS=${LIBS:Q} CPPFLAGS=${CPPFLAGS:Q} \
 	    ${TOOLS_SHELL} ${WRKSRC}/Build.sh -L -r
-	${SED} -i -e "s,/etc,${PKG_SYSCONFDIR},g" ${WRKSRC}/skel.mkshrc
 
 do-install:
 	${INSTALL_PROGRAM} ${WRKSRC}/mksh ${DESTDIR}${PREFIX}/bin/mksh
