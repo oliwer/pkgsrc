@@ -706,7 +706,7 @@ Minix)
 	set_opsys=no
 	machine_arch=`uname -p`
 	LDFLAGS="-lcompat_minix -lminlib"
-	;;	
+	;;
 MirBSD)
 	root_group=wheel
 	need_pax=yes
@@ -1116,7 +1116,7 @@ yes) echo_msg "Bootstrapping ksh"
 	copy_src $pkgsrcdir/shells/mksh/files ksh
 	test -n "$CC" || CC=gcc # default to gcc if no compiler is specified
 	mksh_para=""; test $make_jobs -lt 2 || mksh_para="-j"
-	run_cmd "(cd $wrkdir/ksh && env $BSTRAP_ENV CFLAGS=\"${CFLAGS} -DMKSH_BINSHPOSIX\" $shprog ./Build.sh -r $mksh_para)"
+	run_cmd "(cd $wrkdir/ksh && env $BSTRAP_ENV CPPFLAGS=\"${CPPFLAGS} -DMKSH_BINSHPOSIX\" $shprog ./Build.sh -r $mksh_para)"
 	run_cmd "$install_sh -c -o $user -g $group -m 755 $wrkdir/ksh/mksh $wrkdir/bin/mksh"
 	run_cmd "(cd $wrkdir/bin && ln -s mksh sh)"
 	echo "TOOLS_PLATFORM.sh?= $prefix/bin/sh" >> ${TARGET_MKCONF}
