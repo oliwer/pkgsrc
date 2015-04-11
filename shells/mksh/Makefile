@@ -21,6 +21,8 @@ SUBST_STAGE.skel=		pre-configure
 SUBST_FILES.skel=		skel.mkshrc
 SUBST_SED.skel=		-e "s,/etc,${PKG_SYSCONFDIR},g"
 
+WRKBUILD?=			${WRKSRC}/build
+
 EGDIR=				${PREFIX}/share/examples/mksh
 CONF_FILES=			${EGDIR}/mkshrc ${PKG_SYSCONFDIR}/mkshrc
 CONF_FILES+=			${EGDIR}/mkshrc.skel ${PKG_SYSCONFDIR}/skel/.mkshrc
@@ -30,17 +32,18 @@ MAKE_DIRS=			${PKG_SYSCONFDIR}/skel
 
 do-extract:
 	${CP} -R ${FILESDIR} ${WRKSRC}
+	${MKDIR} ${WRKBUILD}
 
 do-build:
-	cd ${WRKSRC} && ${SETENV} ${MAKE_ENV} LIBS=${LIBS:Q} CPPFLAGS=${CPPFLAGS:Q} \
+	cd ${WRKBUILD} && ${SETENV} ${MAKE_ENV} LIBS=${LIBS:Q} CPPFLAGS=${CPPFLAGS:Q} \
 	    ${TOOLS_SHELL} ${WRKSRC}/Build.sh -r
 	# lksh
-	cd ${WRKSRC} && ${SETENV} ${MAKE_ENV} LIBS=${LIBS:Q} CPPFLAGS=${CPPFLAGS:Q} \
+	cd ${WRKBUILD} && ${SETENV} ${MAKE_ENV} LIBS=${LIBS:Q} CPPFLAGS=${CPPFLAGS:Q} \
 	    ${TOOLS_SHELL} ${WRKSRC}/Build.sh -L -r
 
 do-install:
-	${INSTALL_PROGRAM} ${WRKSRC}/mksh ${DESTDIR}${PREFIX}/bin/mksh
-	${INSTALL_PROGRAM} ${WRKSRC}/lksh ${DESTDIR}${PREFIX}/bin/lksh
+	${INSTALL_PROGRAM} ${WRKBUILD}/mksh ${DESTDIR}${PREFIX}/bin/mksh
+	${INSTALL_PROGRAM} ${WRKBUILD}/lksh ${DESTDIR}${PREFIX}/bin/lksh
 	${INSTALL_MAN} ${WRKSRC}/mksh.1 ${DESTDIR}${PREFIX}/${PKGMANDIR}/man1/
 	${INSTALL_MAN} ${WRKSRC}/lksh.1 ${DESTDIR}${PREFIX}/${PKGMANDIR}/man1/
 	${INSTALL_DATA} ${WRKSRC}/dot.mkshrc ${DESTDIR}${EGDIR}/mkshrc
