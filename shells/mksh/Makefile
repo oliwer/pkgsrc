@@ -21,7 +21,12 @@ SUBST_STAGE.skel=		pre-configure
 SUBST_FILES.skel=		skel.mkshrc
 SUBST_SED.skel=		-e "s,/etc,${PKG_SYSCONFDIR},g"
 
-INSTALLATION_DIRS=		bin ${PKGMANDIR}/man1 ${PKG_SYSCONFDIR}/skel
+EGDIR=				${PREFIX}/share/examples/mksh
+CONF_FILES=			${EGDIR}/mkshrc ${PKG_SYSCONFDIR}/mkshrc
+CONF_FILES+=			${EGDIR}/mkshrc.skel ${PKG_SYSCONFDIR}/skel/.mkshrc
+
+INSTALLATION_DIRS=		bin ${PKGMANDIR}/man1 share/examples/mksh
+MAKE_DIRS=			${PKG_SYSCONFDIR}/skel
 
 do-extract:
 	${CP} -R ${FILESDIR} ${WRKSRC}
@@ -38,8 +43,8 @@ do-install:
 	${INSTALL_PROGRAM} ${WRKSRC}/lksh ${DESTDIR}${PREFIX}/bin/lksh
 	${INSTALL_MAN} ${WRKSRC}/mksh.1 ${DESTDIR}${PREFIX}/${PKGMANDIR}/man1/
 	${INSTALL_MAN} ${WRKSRC}/lksh.1 ${DESTDIR}${PREFIX}/${PKGMANDIR}/man1/
-	${INSTALL_DATA} ${WRKSRC}/dot.mkshrc ${DESTDIR}${PKG_SYSCONFDIR}/mkshrc
-	${INSTALL_DATA} ${WRKSRC}/skel.mkshrc ${DESTDIR}${PKG_SYSCONFDIR}/skel/.mkshrc
+	${INSTALL_DATA} ${WRKSRC}/dot.mkshrc ${DESTDIR}${EGDIR}/mkshrc
+	${INSTALL_DATA} ${WRKSRC}/skel.mkshrc ${DESTDIR}${EGDIR}/mkshrc.skel
 
 # Uncomment this if you want to run the regression tests
 #USE_TOOLS+=			perl

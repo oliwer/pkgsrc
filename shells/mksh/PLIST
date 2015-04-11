@@ -1,7 +1,7 @@
 @comment $NetBSD$
 bin/lksh
 bin/mksh
-etc/mkshrc
-etc/skel/.mkshrc
 man/man1/lksh.1
 man/man1/mksh.1
+share/examples/mksh/mkshrc
+share/examples/mksh/mkshrc.skel
