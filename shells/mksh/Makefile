@@ -13,6 +13,13 @@ LICENSE=			miros
 
 PKG_SHELL=			bin/mksh
 
+.include "../../mk/bsd.prefs.mk"
+
+BUILDFLAGS=			-r
+.if !empty(MAKE_JOBS)
+BUILDFLAGS+=			-j
+.endif
+
 CPPFLAGS+=			-DMKSH_BINSHPOSIX -DMKSH_DISABLE_EXPERIMENTAL
 LIBS.Interix+=			-lcrypt
 
@@ -36,10 +43,10 @@ do-extract:
 
 do-build:
 	cd ${WRKBUILD} && ${SETENV} ${MAKE_ENV} LIBS=${LIBS:Q} CPPFLAGS=${CPPFLAGS:Q} \
-	    ${TOOLS_SHELL} ${WRKSRC}/Build.sh -r
+	    ${TOOLS_SHELL} ${WRKSRC}/Build.sh ${BUILDFLAGS}
 	# lksh
 	cd ${WRKBUILD} && ${SETENV} ${MAKE_ENV} LIBS=${LIBS:Q} CPPFLAGS=${CPPFLAGS:Q} \
-	    ${TOOLS_SHELL} ${WRKSRC}/Build.sh -L -r
+	    ${TOOLS_SHELL} ${WRKSRC}/Build.sh ${BUILDFLAGS} -L
 
 do-install:
 	${INSTALL_PROGRAM} ${WRKBUILD}/mksh ${DESTDIR}${PREFIX}/bin/mksh
